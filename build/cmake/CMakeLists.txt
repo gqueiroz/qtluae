@@ -19,6 +19,7 @@
 #
 #  Authors: Gilberto Ribeiro de Queiroz <gribeiro@dpi.inpe.br>
 #           Pedro Ribeiro <pedro@dpi.inpe.br>
+#			Raian Vargas Maretto <raian@dpi.inpe.br>
 #
 #  Description: Main CMake script of QtLua-Extras build system.
 #
@@ -83,7 +84,11 @@ else()
 
 endif()
 
-find_package(Lua51 REQUIRED)
+if(NOT (${CMAKE_MAJOR_VERSION} LESS 3))
+	find_package(Lua REQUIRED)
+else(NOT (${CMAKE_MAJOR_VERSION} LESS 3))
+	find_package(Lua51 REQUIRED)
+endif(NOT (${CMAKE_MAJOR_VERSION} LESS 3))
 
 find_package(QtLua REQUIRED)
 
