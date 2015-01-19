@@ -43,6 +43,33 @@
 #include <QtLua/Function>
 #include <QtLua/State>
 
+QTLUA_FUNCTION(config_qslider,
+               "Config a QSlider",
+               "Usage: qt.config_qslider(qobject, \"item-value\", \"another-item\")\n")
+{
+  meta_call_check_args(args, 1, 3, QtLua::Value::TUserData, QtLua::Value::TNumber, QtLua::Value::TNumber);
+
+  QObject* obj = get_arg_qobject<QObject>(args, 0);
+
+  if(obj == nullptr)
+    QTLUA_THROW(qt.config_qslider, "Bad object type.");
+
+  QSlider* slider = dynamic_cast<QSlider*>(obj);
+
+  if(slider == nullptr)
+    QTLUA_THROW(qt.config_qslider, "Provided QObject is not of type QSlider.");
+
+  int item1 = QtLua::Function::get_arg<int>(args, 1, 1);
+  int item2 = QtLua::Function::get_arg<int>(args, 2, 1);
+
+  slider->setOrientation(static_cast<Qt::Orientation>(item1));
+  slider->setTickInterval(item2);
+  slider->setTickPosition(QSlider::TicksBelow);
+
+  return QtLua::Value(0);
+}
+
+
 QTLUA_FUNCTION(combobox_add_item,
                "Wrap QComboBox::addItem function",
                "Usage: qt.combobox.additem(qobject, \"item-value\")\n")
@@ -103,6 +130,7 @@ void register_qtluae_functions(QtLua::State* qtlua_state)
 {
   QTLUA_FUNCTION_REGISTER(qtlua_state, "qt.", combobox_add_item);
   QTLUA_FUNCTION_REGISTER(qtlua_state, "qt.", set_icon);
+  QTLUA_FUNCTION_REGISTER(qtlua_state, "qt.", config_qslider);
 }
 
 
