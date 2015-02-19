@@ -28,6 +28,10 @@ cmake_minimum_required(VERSION 2.8.7)
 
 project(qtlua_extras)
 
+if(CMAKE_COMPILER_IS_GNUCXX)
+        set(CMAKE_CXX_FLAGS_RELEASE "-std=c++0x") #Flag needed to build QtLuae on Linux environments
+        set(CMAKE_CXX_FLAGS_DEBUG  "-std=c++0x") #Flag needed to build QtLuae on Linux environments
+endif(CMAKE_COMPILER_IS_GNUCXX)
 
 #
 # main variables for the build script
