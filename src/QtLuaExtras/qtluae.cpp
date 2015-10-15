@@ -144,7 +144,7 @@ extern "C"
 
 
 
-int luaopen_qtluae(lua_State* L)
+__declspec(dllexport) int luaopen_qtluae(lua_State* L)
 {
   if(QApplication::instance() == nullptr)
   {
