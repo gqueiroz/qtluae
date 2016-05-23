@@ -162,8 +162,11 @@ static QApplication* sg_app(nullptr);
 
 extern "C"
 {
-
+#ifdef _MSC_VER
+__declspec(dllexport) int luaopen_qtluae(lua_State* L)
+#else
 int luaopen_qtluae(lua_State* L)
+#endif
 {
   if(QApplication::instance() == nullptr)
   {
