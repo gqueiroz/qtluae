@@ -38,6 +38,7 @@
 #include <QIcon>
 #include <QMenu>
 #include <QToolButton>
+#include <QListWidget>
 
 // QtLua
 #include <QtLua/Function>
@@ -69,7 +70,6 @@ QTLUA_FUNCTION(config_qslider,
   return QtLua::Value(0);
 }
 
-
 QTLUA_FUNCTION(combobox_add_item,
                "Wrap QComboBox::addItem function",
                "Usage: qt.combobox.additem(qobject, \"item-value\")\n")
@@ -89,6 +89,29 @@ QTLUA_FUNCTION(combobox_add_item,
   QString item = QtLua::Function::get_arg<QString>(args, 1, "");
 
   cb->addItem(item);
+
+  return QtLua::Value(0);
+}
+
+QTLUA_FUNCTION(listwidget_add_item,
+               "Wrap QListWidget::addItem function",
+               "Usage: qt.listwidget.additem(qobject, \"item-value\")\n")
+{
+  meta_call_check_args(args, 2, 2, QtLua::Value::TUserData, QtLua::Value::TString);
+
+  QObject* obj = get_arg_qobject<QObject>(args, 0);
+
+  if(obj == nullptr)
+    QTLUA_THROW(qt.lisgwidget.additem, "Bad object type.");
+
+  QListWidget* lw = dynamic_cast<QListWidget*>(obj);
+
+  if(lw == nullptr)
+    QTLUA_THROW(qt.listwidget.additem, "Provided QObject is not of type QListWidget.");
+
+  QString item = QtLua::Function::get_arg<QString>(args, 1, "");
+
+  lw->addItem(item);
 
   return QtLua::Value(0);
 }
@@ -125,26 +148,25 @@ QTLUA_FUNCTION(set_icon,
   return QtLua::Value(ls);
 }
 
-
 void register_qtluae_functions(QtLua::State* qtlua_state)
 {
   QTLUA_FUNCTION_REGISTER(qtlua_state, "qt.", combobox_add_item);
+  QTLUA_FUNCTION_REGISTER(qtlua_state, "qt.", listwidget_add_item);
   QTLUA_FUNCTION_REGISTER(qtlua_state, "qt.", set_icon);
   QTLUA_FUNCTION_REGISTER(qtlua_state, "qt.", config_qslider);
 }
-
 
 static QtLua::State* sg_qtlua_state(nullptr);
 
 static QApplication* sg_app(nullptr);
 
-
 extern "C"
 {
-
-
-
+#ifdef _MSC_VER
+__declspec(dllexport) int luaopen_qtluae(lua_State* L)
+#else
 int luaopen_qtluae(lua_State* L)
+#endif
 {
   if(QApplication::instance() == nullptr)
   {
@@ -164,3 +186,4 @@ int luaopen_qtluae(lua_State* L)
 }
 
 } // end extern "C"
+
