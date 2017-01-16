@@ -53,6 +53,11 @@ set(QTLUAE_ABSOLUTE_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../..)
 # global definitions and includes
 #
 
+if(MSVC)
+	set(CMAKE_DEBUG_POSTFIX "d")
+	add_definitions(/MP)
+endif()
+
 include_directories(${CMAKE_BINARY_DIR})
 
 
@@ -88,11 +93,7 @@ else()
 
 endif()
 
-if(NOT (${CMAKE_MAJOR_VERSION} LESS 3))
-	find_package(Lua REQUIRED)
-else(NOT (${CMAKE_MAJOR_VERSION} LESS 3))
-	find_package(Lua51 REQUIRED)
-endif(NOT (${CMAKE_MAJOR_VERSION} LESS 3))
+find_package(Lua REQUIRED)
 
 find_package(QtLua REQUIRED)
 

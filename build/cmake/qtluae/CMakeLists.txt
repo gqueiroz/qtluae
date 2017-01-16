@@ -51,7 +51,7 @@ if(Qt5_FOUND)
 
   add_library(qtluae SHARED ${QTLUAE_FILES})
 
-  target_link_libraries(qtluae ${QTLUA_LIBRARY})
+  target_link_libraries(qtluae ${QTLUA_LIBRARY} ${LUA_LIBRARY})
 
   qt5_use_modules(qtluae Core Widgets)
 
@@ -61,8 +61,7 @@ else()
 
   add_library(qtluae SHARED ${QTLUAE_FILES})
 
-  target_link_libraries(qtluae ${QTLUA_LIBRARY}
-                               ${QT_LIBRARIES})
+  target_link_libraries(qtluae ${LUA_LIBRARY} ${QTLUA_LIBRARY} ${QT_LIBRARIES})
 
 endif()
 
